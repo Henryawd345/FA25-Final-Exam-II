@@ -167,8 +167,38 @@ void processCoffeeRound(CoffeeQueue &queue, int roundNumber){
         cout << " Queue was empty at start of round, so no one was served.\n";
     }
 
-    cout << " Queue now: ";
+    cout << " Coffee queue now: ";
     queue.printQueue();
+    cout << "\n\n";
+}
+
+void processMuffinRound(deque<Customer> &queue, int roundNumber){
+    cout << "===== Muffin booth (Round " << roundNumber << ") =====\n";
+
+    bool wasEmptyAtStart = queue.empty();
+
+    if (coinFlip()) {
+        Customer newcomer = randomMuffinCustomer();
+        queue.push_back(newcomer);
+        cout << " New customer joined: " << newcomer.name << " wants " << newcomer.drink << "\n";
+    }
+    else {
+        cout << " No new customer joined this round.\n ";
+    }
+
+    if (!wasEmptyAtStart) {
+        if (!queue.empty()){
+            Customer served = queue.front();
+            queue.pop_front();
+            cout << " served: " << served.name << " (" << served.drink << ")\n";
+        }
+    }
+    else{
+        cout << " Queue was empty at start of round, so no one was served.\n";
+    }
+
+    cout << " Muffin queue now: ";
+    printDeque(queue);
     cout << "\n\n";
 }
 
@@ -176,29 +206,45 @@ int main (){
     srand(static_cast<unsigned int>(time(nullptr)));
 
     CoffeeQueue coffeeQ;
+    deque<Customer> muffinQ;
 
     const int INITIAL_CUSTOMERS = 3;
     const int ROUNDS = 10;
 
-    cout << "=== Coffee Booth Queue Simulation (Milestone 2) ===\n\n";
+    cout << "=== Coffee Booth Queue Simulation (Milestone 3) ===\n\n";
 
-    cout << "Initializing queue with " << INITIAL_CUSTOMERS << " customers...\n";
+    cout << "Initializing COFFEE queue with " << INITIAL_CUSTOMERS << " customers...\n";
 
     for (int i = 0; i < INITIAL_CUSTOMERS; i++){
-        Customer c = randomCustomer();
+        Customer c = randomCoffeeCustomer();
         coffeeQ.enqueue(c);
-        cout << " Joined queue: " << c.name << " ordered " << c.drink << "\n";
+        cout << " Coffee: " << c.name << " ordered " << c.drink << "\n";
     }
 
-    cout << "\nInitial queue: ";
+    cout << "Initializing MUFFIN queue with " << INITIAL_CUSTOMERS << " customers...\n";
+
+    for (int i = 0; i < INITIAL_CUSTOMERS; i++){
+        Customer c = randomMuffinCustomer();
+        muffinQ.push_back(c);
+        cout << " Muffin: " << c.name << " wants " << c.drink << "\n";
+    }
+
+    cout << "\nInitial coffee queue: ";
     coffeeQ.printQueue();
+    cout << "\nInitial muffin queue: ";
+    printDeque(muffinQ);
     cout << "\n\n";
 
     for (int round = 1; round <= ROUNDS; round++){
-        processRound(coffeeQ, round);
+        cout << "=============================\n";
+        cout << "        ROUND " << round << "\n";
+        cout << "=============================\n";
+
+        processCoffeeRound(coffeeQ, round);
+        processMuffinRound(muffinQ, round);
     }
 
-    cout << "=== End of Milestone 2 ===\n";
+    cout << "=== End of Milestone 3 ===\n";
 
     return 0;
 }
