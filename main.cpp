@@ -108,6 +108,33 @@ Customer randomCustomer() {
     return c;
 }
 
+bool coinFlip() {
+    return rand() % 2 == 0;
+}
+
+void processRound(CoffeeQueue &queue, int roundNumber){
+    cout << "===== Round " << roundNumber << " =====\n";
+
+    bool wasEmptyAtStart = queue.isEmpty();
+
+    if (coinFlip()) {
+        Customer newcomer = randomCustomer();
+        queue.enqueue(newcomer);
+        cout << " New customer joined: " << newcomer.name << " ordered " << newcomer.drink << "\n";
+    }
+    else {
+        cout << " No new customer joined this round.\n ";
+    }
+
+    if (!wasEmptyAtStart) {
+        Customer served;
+        bool ok = queue.dequeue(served);
+        if (ok){
+            cout << " Served: " << served.name << " (" << served.drink << ")\n";
+        }
+    }
+
+}
 
 int main (){
     srand(static_cast<unsigned int>(time(nullptr)));
