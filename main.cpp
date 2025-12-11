@@ -62,7 +62,18 @@ class CoffeeQueue{
             return true;
         }
 
-        
+        void printQueue() const{
+            if (isEmpty()){
+                cout << "[empty]";
+                return;
+            }
+
+            Node* cur = head;
+            while (cur != nullptr){
+                cout << "(" << cur->data.name << " - " << cur->data.drink << ") ";
+                cur = cur->next;
+            }
+        }
 };
 
 const string NAMES[] = {
@@ -82,6 +93,21 @@ const string DRINKS[] = {
     "Chai Latte",
     "Matcha Latte"
 };
+
+const int NAME_COUNT = sizeof(NAMES) / sizeof(NAMES[0]);
+const int DRINK_COUNT = sizeof(DRINKS) / sizeof(DRINKS[0]);
+
+int randomIndex (int maxExclusive){
+    return rand() % maxExclusive;
+}
+
+Customer randomCustomer() {
+    Customer c;
+    c.name = NAMES[randomIndex(NAME_COUNT)];
+    c.drink = DRINKS[randomIndex(DRINK_COUNT)];
+    return c;
+}
+
 
 int main (){
 
