@@ -129,7 +129,20 @@ int main (){
     coffeeQ.printQueue();
     cout << "\n\n";
 
-    
+    cout << "Now serving customers in FIFO order:\n";
+    Customer served;
+    int round = 1;
+
+    while (coffeeQ.dequeue(served)){
+        cout << " Round " << round++ << " -> Served: " << served.name << " (" << served.drink << ")\n";
+
+        cout << "  Queue now: ";
+        coffeeQ.printQueue();
+        cout << "\n";
+    }
+
+    cout << "\nAll customers have been served. (Queue is empty.)\n";
+    cout << "=== End of Milestone 1 ===\n";
 
     return 0;
 }
