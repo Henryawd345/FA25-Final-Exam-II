@@ -286,7 +286,7 @@ void processBraceletRound(vector<Customer> &queue, int roundNumber){
         cout << " Queue was empty at start of round, so no one was served.\n";
     }
 
-    cout << " Muffin queue now: ";
+    cout << " Bracelet queue now: ";
     printVector(queue);
     cout << "\n\n";
 }
@@ -297,9 +297,9 @@ void processTacoRound(queue<Customer> &q, int roundNumber){
     bool wasEmptyAtStart = q.empty();
 
     if (coinFlip()) {
-        Customer newcomer = randomBraceletCustomer();
+        Customer newcomer = randomTacoCustomer();
         q.push(newcomer);
-        cout << " New customer joined: " << newcomer.name << " wants " << newcomer.item << "\n";
+        cout << " New customer joined: " << newcomer.name << " ordered " << newcomer.item << "\n";
     }
     else {
         cout << " No new customer joined this round.\n ";
@@ -328,6 +328,7 @@ int main (){
     CoffeeQueue coffeeQ;
     deque<Customer> muffinQ;
     vector<Customer> braceletQ;
+    queue<Customer> tacoQ;
 
     const int INITIAL_CUSTOMERS = 3;
     const int ROUNDS = 10;
@@ -354,16 +355,26 @@ int main (){
 
     for (int i = 0; i < INITIAL_CUSTOMERS; i++){
         Customer c = randomBraceletCustomer();
-        muffinQ.push_back(c);
+        braceletQ.push_back(c);
         cout << " Bracelet: " << c.name << " wants " << c.item << "\n";
+    }
+
+    cout << "Initializing TACO queue with " << INITIAL_CUSTOMERS << " customers...\n";
+
+    for (int i = 0; i < INITIAL_CUSTOMERS; i++){
+        Customer c = randomTacoCustomer();
+        tacoQ.push(c);
+        cout << " Taco: " << c.name << " ordered " << c.item << "\n";
     }
 
     cout << "\nInitial coffee queue: ";
     coffeeQ.printQueue();
     cout << "\nInitial muffin queue: ";
     printDeque(muffinQ);
-    cout << "\nInitial muffin queue: ";
+    cout << "\nInitial bracelet queue: ";
     printVector(braceletQ);
+    cout << "\nInitial taco queue: ";
+    printQueueAnother(tacoQ);
     cout << "\n\n";
 
     for (int round = 1; round <= ROUNDS; round++){
@@ -374,6 +385,7 @@ int main (){
         processCoffeeRound(coffeeQ, round);
         processMuffinRound(muffinQ, round);
         processBraceletRound(braceletQ, round);
+        processTacoRound(tacoQ, round);
     }
 
     cout << "=== End of Milestone 4 ===\n";
