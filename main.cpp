@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <deque>
 
 using namespace std;
 
@@ -81,7 +82,7 @@ const string NAMES[] = {
     "Casey", "Morgan", "Jamie", "Drew", "Quinn"
 };
 
-const string DRINKS[] = {
+const string COFFEE_DRINKS[] = {
     "Latte",
     "Cappuccino",
     "Espresso",
@@ -94,31 +95,60 @@ const string DRINKS[] = {
     "Matcha Latte"
 };
 
+const string MUFFIN_FLAVORS[] = {
+    "Blueberry Muffin",
+    "Chocolate Chip Muffin",
+    "Banana Nut Muffin",
+    "Bran Muffin",
+    "Lemon Poppyseed Muffin",
+    "Cinnamon Streusel Muffin",
+    "Pumpkin Spice Muffin"
+};
+
 const int NAME_COUNT = sizeof(NAMES) / sizeof(NAMES[0]);
-const int DRINK_COUNT = sizeof(DRINKS) / sizeof(DRINKS[0]);
+const int COFFEE_COUNT = sizeof(COFFEE_DRINKS) / sizeof(COFFEE_DRINKS[0]);
+const int MUFFIN_COUNT = sizeof(MUFFIN_FLAVORS) / sizeof(MUFFIN_FLAVORS[0]);
 
 int randomIndex (int maxExclusive){
     return rand() % maxExclusive;
 }
 
-Customer randomCustomer() {
+Customer randomCoffeeCustomer() {
     Customer c;
     c.name = NAMES[randomIndex(NAME_COUNT)];
-    c.drink = DRINKS[randomIndex(DRINK_COUNT)];
+    c.drink = COFFEE_DRINKS[randomIndex(COFFEE_COUNT)];
     return c;
 }
+
+Customer randomMuffinCustomer() {
+    Customer c;
+    c.name = NAMES[randomIndex(NAME_COUNT)];
+    c.drink = MUFFIN_FLAVORS[randomIndex(MUFFIN_COUNT)];
+    return c;
+}
+
 
 bool coinFlip() {
     return rand() % 2 == 0;
 }
 
-void processRound(CoffeeQueue &queue, int roundNumber){
-    cout << "===== Round " << roundNumber << " =====\n";
+void printDeque(const deque<Customer>& dq){
+    if (dq.empty()){
+        cout << "[empty]";
+        return;
+    }
+    for (const auto& c : dq){
+        cout << "(" << c.name << " - " << c.drink << ") ";
+    }
+}
+
+void processCoffeeRound(CoffeeQueue &queue, int roundNumber){
+    cout << "===== Coffee booth (Round " << roundNumber << ") =====\n";
 
     bool wasEmptyAtStart = queue.isEmpty();
 
     if (coinFlip()) {
-        Customer newcomer = randomCustomer();
+        Customer newcomer = randomCoffeeCustomer();
         queue.enqueue(newcomer);
         cout << " New customer joined: " << newcomer.name << " ordered " << newcomer.drink << "\n";
     }
@@ -140,7 +170,6 @@ void processRound(CoffeeQueue &queue, int roundNumber){
     cout << " Queue now: ";
     queue.printQueue();
     cout << "\n\n";
-
 }
 
 int main (){
