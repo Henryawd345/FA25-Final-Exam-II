@@ -110,7 +110,26 @@ Customer randomCustomer() {
 
 
 int main (){
+    srand(static_cast<unsigned int>(time(nullptr)));
 
+    CoffeeQueue coffeeQ;
+
+    cout << "=== Coffee Booth Queue Simulation (Milestone 1) ===\n\n";
+
+    const int INITIAL_CUSTOMERS = 5;
+    cout << "Adding " << INITIAL_CUSTOMERS << " customers to the queue...\n";
+
+    for (int i = 0; i < INITIAL_CUSTOMERS; i++){
+        Customer c = randomCustomer();
+        coffeeQ.enqueue(c);
+        cout << " Joined queue: " << c.name << " ordered " << c.drink << "\n";
+    }
+
+    cout << "\nCurrent queue: ";
+    coffeeQ.printQueue();
+    cout << "\n\n";
+
+    
 
     return 0;
 }
