@@ -267,11 +267,12 @@ int main (){
 
     CoffeeQueue coffeeQ;
     deque<Customer> muffinQ;
+    vector<Customer> braceletQ;
 
     const int INITIAL_CUSTOMERS = 3;
     const int ROUNDS = 10;
 
-    cout << "=== Coffee Booth Queue Simulation (Milestone 3) ===\n\n";
+    cout << "=== Coffee Booth Queue Simulation (Milestone 4) ===\n\n";
 
     cout << "Initializing COFFEE queue with " << INITIAL_CUSTOMERS << " customers...\n";
 
@@ -289,10 +290,20 @@ int main (){
         cout << " Muffin: " << c.name << " wants " << c.item << "\n";
     }
 
+    cout << "Initializing BRACELET queue with " << INITIAL_CUSTOMERS << " customers...\n";
+
+    for (int i = 0; i < INITIAL_CUSTOMERS; i++){
+        Customer c = randomBraceletCustomer();
+        muffinQ.push_back(c);
+        cout << " Bracelet: " << c.name << " wants " << c.item << "\n";
+    }
+
     cout << "\nInitial coffee queue: ";
     coffeeQ.printQueue();
     cout << "\nInitial muffin queue: ";
     printDeque(muffinQ);
+    cout << "\nInitial muffin queue: ";
+    printVector(braceletQ);
     cout << "\n\n";
 
     for (int round = 1; round <= ROUNDS; round++){
@@ -302,9 +313,10 @@ int main (){
 
         processCoffeeRound(coffeeQ, round);
         processMuffinRound(muffinQ, round);
+        processBraceletRound(braceletQ, round);
     }
 
-    cout << "=== End of Milestone 3 ===\n";
+    cout << "=== End of Milestone 4 ===\n";
 
     return 0;
 }
