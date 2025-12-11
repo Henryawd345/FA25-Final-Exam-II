@@ -333,7 +333,7 @@ int main (){
     const int INITIAL_CUSTOMERS = 3;
     const int ROUNDS = 10;
 
-    cout << "=== Coffee Booth Queue Simulation (Milestone 4) ===\n\n";
+    cout << "=== Coffee Booth Queue Simulation (Milestone 5) ===\n\n";
 
     cout << "Initializing COFFEE queue with " << INITIAL_CUSTOMERS << " customers...\n";
 
@@ -388,7 +388,7 @@ int main (){
         processTacoRound(tacoQ, round);
     }
 
-    cout << "=== End of Milestone 4 ===\n";
+    cout << "=== End of Milestone 5 ===\n";
 
     return 0;
 }
