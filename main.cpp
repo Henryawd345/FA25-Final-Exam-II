@@ -3,12 +3,13 @@
 #include <cstdlib>
 #include <ctime>
 #include <deque>
+#include <vector>
 
 using namespace std;
 
 struct Customer {
     string name;
-    string drink;
+    string item;
 };
 
 class CoffeeQueue{
@@ -71,7 +72,7 @@ class CoffeeQueue{
 
             Node* cur = head;
             while (cur != nullptr){
-                cout << "(" << cur->data.name << " - " << cur->data.drink << ") ";
+                cout << "(" << cur->data.name << " - " << cur->data.item << ") ";
                 cur = cur->next;
             }
         }
@@ -105,9 +106,20 @@ const string MUFFIN_FLAVORS[] = {
     "Pumpkin Spice Muffin"
 };
 
+const string BRACELET_STYLES[] = {
+    "Rainbow Friendship Bracelet",
+    "Beaded Name Bracelet",
+    "Charm Bracelet",
+    "Braided String Bracelet",
+    "Glow-in-the-dark Bracelet",
+    "Heart Charm Bracelet",
+    "Star Bead Bracelet"
+};
+
 const int NAME_COUNT = sizeof(NAMES) / sizeof(NAMES[0]);
 const int COFFEE_COUNT = sizeof(COFFEE_DRINKS) / sizeof(COFFEE_DRINKS[0]);
 const int MUFFIN_COUNT = sizeof(MUFFIN_FLAVORS) / sizeof(MUFFIN_FLAVORS[0]);
+const int BRACELET_COUNT    = sizeof(BRACELET_STYLES) / sizeof(BRACELET_STYLES[0]);
 
 int randomIndex (int maxExclusive){
     return rand() % maxExclusive;
@@ -116,14 +128,21 @@ int randomIndex (int maxExclusive){
 Customer randomCoffeeCustomer() {
     Customer c;
     c.name = NAMES[randomIndex(NAME_COUNT)];
-    c.drink = COFFEE_DRINKS[randomIndex(COFFEE_COUNT)];
+    c.item = COFFEE_DRINKS[randomIndex(COFFEE_COUNT)];
     return c;
 }
 
 Customer randomMuffinCustomer() {
     Customer c;
     c.name = NAMES[randomIndex(NAME_COUNT)];
-    c.drink = MUFFIN_FLAVORS[randomIndex(MUFFIN_COUNT)];
+    c.item = MUFFIN_FLAVORS[randomIndex(MUFFIN_COUNT)];
+    return c;
+}
+
+Customer randomBraceletCustomer() {
+    Customer c;
+    c.name = NAMES[randomIndex(NAME_COUNT)];
+    c.item = BRACELET_STYLES[randomIndex(BRACELET_COUNT)];
     return c;
 }
 
@@ -138,7 +157,17 @@ void printDeque(const deque<Customer>& dq){
         return;
     }
     for (const auto& c : dq){
-        cout << "(" << c.name << " - " << c.drink << ") ";
+        cout << "(" << c.name << " - " << c.item << ") ";
+    }
+}
+
+void printVector (const vector<Customer>& v){
+    if (v.empty()){
+        cout << "[empty]";
+        return;
+    }
+    for (const auto& c : v){
+        cout << "(" << c.name << " - " << c.item << ") ";
     }
 }
 
@@ -150,7 +179,7 @@ void processCoffeeRound(CoffeeQueue &queue, int roundNumber){
     if (coinFlip()) {
         Customer newcomer = randomCoffeeCustomer();
         queue.enqueue(newcomer);
-        cout << " New customer joined: " << newcomer.name << " ordered " << newcomer.drink << "\n";
+        cout << " New customer joined: " << newcomer.name << " ordered " << newcomer.item << "\n";
     }
     else {
         cout << " No new customer joined this round.\n ";
@@ -160,7 +189,7 @@ void processCoffeeRound(CoffeeQueue &queue, int roundNumber){
         Customer served;
         bool ok = queue.dequeue(served);
         if (ok){
-            cout << " Served: " << served.name << " (" << served.drink << ")\n";
+            cout << " Served: " << served.name << " (" << served.item << ")\n";
         }
     }
     else{
@@ -180,7 +209,7 @@ void processMuffinRound(deque<Customer> &queue, int roundNumber){
     if (coinFlip()) {
         Customer newcomer = randomMuffinCustomer();
         queue.push_back(newcomer);
-        cout << " New customer joined: " << newcomer.name << " wants " << newcomer.drink << "\n";
+        cout << " New customer joined: " << newcomer.name << " wants " << newcomer.item << "\n";
     }
     else {
         cout << " No new customer joined this round.\n ";
@@ -190,7 +219,7 @@ void processMuffinRound(deque<Customer> &queue, int roundNumber){
         if (!queue.empty()){
             Customer served = queue.front();
             queue.pop_front();
-            cout << " served: " << served.name << " (" << served.drink << ")\n";
+            cout << " served: " << served.name << " (" << served.item << ")\n";
         }
     }
     else{
@@ -201,6 +230,37 @@ void processMuffinRound(deque<Customer> &queue, int roundNumber){
     printDeque(queue);
     cout << "\n\n";
 }
+
+void processBraceletRound(vector<Customer> &queue, int roundNumber){
+    cout << "===== Bracelet booth (Round " << roundNumber << ") =====\n";
+
+    bool wasEmptyAtStart = queue.empty();
+
+    if (coinFlip()) {
+        Customer newcomer = randomBraceletCustomer();
+        queue.push_back(newcomer);
+        cout << " New customer joined: " << newcomer.name << " wants " << newcomer.item << "\n";
+    }
+    else {
+        cout << " No new customer joined this round.\n ";
+    }
+
+    if (!wasEmptyAtStart) {
+        if (!queue.empty()){
+            Customer served = queue.front();
+            queue.erase(queue.begin());
+            cout << " served: " << served.name << " (" << served.item << ")\n";
+        }
+    }
+    else{
+        cout << " Queue was empty at start of round, so no one was served.\n";
+    }
+
+    cout << " Muffin queue now: ";
+    printVector(queue);
+    cout << "\n\n";
+}
+
 
 int main (){
     srand(static_cast<unsigned int>(time(nullptr)));
@@ -218,7 +278,7 @@ int main (){
     for (int i = 0; i < INITIAL_CUSTOMERS; i++){
         Customer c = randomCoffeeCustomer();
         coffeeQ.enqueue(c);
-        cout << " Coffee: " << c.name << " ordered " << c.drink << "\n";
+        cout << " Coffee: " << c.name << " ordered " << c.item << "\n";
     }
 
     cout << "Initializing MUFFIN queue with " << INITIAL_CUSTOMERS << " customers...\n";
@@ -226,7 +286,7 @@ int main (){
     for (int i = 0; i < INITIAL_CUSTOMERS; i++){
         Customer c = randomMuffinCustomer();
         muffinQ.push_back(c);
-        cout << " Muffin: " << c.name << " wants " << c.drink << "\n";
+        cout << " Muffin: " << c.name << " wants " << c.item << "\n";
     }
 
     cout << "\nInitial coffee queue: ";
