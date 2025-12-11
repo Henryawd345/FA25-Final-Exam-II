@@ -4,6 +4,7 @@
 #include <ctime>
 #include <deque>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -116,10 +117,20 @@ const string BRACELET_STYLES[] = {
     "Star Bead Bracelet"
 };
 
+const string TACO_TYPES[] = {
+    "Beef Taco",
+    "Chicken Taco",
+    "Fish Taco",
+    "Veggie Taco",
+    "Carnitas Taco",
+    "Spicy Pork Taco"
+};
+
 const int NAME_COUNT = sizeof(NAMES) / sizeof(NAMES[0]);
 const int COFFEE_COUNT = sizeof(COFFEE_DRINKS) / sizeof(COFFEE_DRINKS[0]);
 const int MUFFIN_COUNT = sizeof(MUFFIN_FLAVORS) / sizeof(MUFFIN_FLAVORS[0]);
 const int BRACELET_COUNT    = sizeof(BRACELET_STYLES) / sizeof(BRACELET_STYLES[0]);
+const int TACO_COUNT     = sizeof(TACO_TYPES)     / sizeof(TACO_TYPES[0]);
 
 int randomIndex (int maxExclusive){
     return rand() % maxExclusive;
@@ -146,6 +157,13 @@ Customer randomBraceletCustomer() {
     return c;
 }
 
+Customer randomTacoCustomer() {
+    Customer c;
+    c.name = NAMES[randomIndex(NAME_COUNT)];
+    c.item = TACO_TYPES[randomIndex(TACO_COUNT)];
+    return c;
+}
+
 
 bool coinFlip() {
     return rand() % 2 == 0;
@@ -168,6 +186,18 @@ void printVector (const vector<Customer>& v){
     }
     for (const auto& c : v){
         cout << "(" << c.name << " - " << c.item << ") ";
+    }
+}
+
+void printQueueAnother (queue<Customer> q){
+    if (q.empty()){
+        cout << "[empty]";
+        return;
+    }
+    while (!q.empty()){
+        Customer c = q.front();
+        cout << "(" << c.name << " - " << c.item << ") ";
+        q.pop();
     }
 }
 
@@ -258,6 +288,36 @@ void processBraceletRound(vector<Customer> &queue, int roundNumber){
 
     cout << " Muffin queue now: ";
     printVector(queue);
+    cout << "\n\n";
+}
+
+void processTacoRound(queue<Customer> &q, int roundNumber){
+    cout << "===== Taco booth (Round " << roundNumber << ") =====\n";
+
+    bool wasEmptyAtStart = q.empty();
+
+    if (coinFlip()) {
+        Customer newcomer = randomBraceletCustomer();
+        q.push(newcomer);
+        cout << " New customer joined: " << newcomer.name << " wants " << newcomer.item << "\n";
+    }
+    else {
+        cout << " No new customer joined this round.\n ";
+    }
+
+    if (!wasEmptyAtStart) {
+        if (!q.empty()){
+            Customer served = q.front();
+            q.pop();
+            cout << " served: " << served.name << " (" << served.item << ")\n";
+        }
+    }
+    else{
+        cout << " Queue was empty at start of round, so no one was served.\n";
+    }
+
+    cout << " Muffin queue now: ";
+    printQueueAnother(q);
     cout << "\n\n";
 }
 
