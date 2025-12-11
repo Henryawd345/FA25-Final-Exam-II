@@ -133,6 +133,13 @@ void processRound(CoffeeQueue &queue, int roundNumber){
             cout << " Served: " << served.name << " (" << served.drink << ")\n";
         }
     }
+    else{
+        cout << " Queue was empty at start of round, so no one was served.\n";
+    }
+
+    cout << " Queue now: ";
+    queue.printQueue();
+    cout << "\n\n";
 
 }
 
@@ -141,10 +148,12 @@ int main (){
 
     CoffeeQueue coffeeQ;
 
-    cout << "=== Coffee Booth Queue Simulation (Milestone 1) ===\n\n";
+    const int INITIAL_CUSTOMERS = 3;
+    const int ROUNDS = 10;
 
-    const int INITIAL_CUSTOMERS = 5;
-    cout << "Adding " << INITIAL_CUSTOMERS << " customers to the queue...\n";
+    cout << "=== Coffee Booth Queue Simulation (Milestone 2) ===\n\n";
+
+    cout << "Initializing queue with " << INITIAL_CUSTOMERS << " customers...\n";
 
     for (int i = 0; i < INITIAL_CUSTOMERS; i++){
         Customer c = randomCustomer();
@@ -152,24 +161,15 @@ int main (){
         cout << " Joined queue: " << c.name << " ordered " << c.drink << "\n";
     }
 
-    cout << "\nCurrent queue: ";
+    cout << "\nInitial queue: ";
     coffeeQ.printQueue();
     cout << "\n\n";
 
-    cout << "Now serving customers in FIFO order:\n";
-    Customer served;
-    int round = 1;
-
-    while (coffeeQ.dequeue(served)){
-        cout << " Round " << round++ << " -> Served: " << served.name << " (" << served.drink << ")\n";
-
-        cout << "  Queue now: ";
-        coffeeQ.printQueue();
-        cout << "\n";
+    for (int round = 1; round <= ROUNDS; round++){
+        processRound(coffeeQ, round);
     }
 
-    cout << "\nAll customers have been served. (Queue is empty.)\n";
-    cout << "=== End of Milestone 1 ===\n";
+    cout << "=== End of Milestone 2 ===\n";
 
     return 0;
 }
